@@ -18,13 +18,13 @@ public class Fibonacci_stub {
 		
 		/* create socket? */
 		String[] methodInvocation = {"Fibonacci","getFibonacciSeries",Integer.toString(number)};
-		ObjectOutputStream objectOutput = remotecall.getOutputStream();
+		ObjectOutputStream objectOutput = remotecall.getOutputStream(); /* ask ta */
         objectOutput.writeObject(s);
         
         /*
          * unmarshal the return value
          */
-        ObjectInputStream objectInput = remotecall.getInputStream();
+        ObjectInputStream objectInput = remotecall.getInputStream();	/* ask ta */
         al = (ArrayList<Integer>)objectInput.readObject();
         
 		return al;
