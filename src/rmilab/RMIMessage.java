@@ -6,6 +6,7 @@ public class RMIMessage {
 		FOUND, EXCEPTION, RETURN, LOOKUP, REBIND, UNBIND;
 		
 	}
+	private int key;
 	private MessageType type;
 	private RemoteObjRef obj;
 	private Exception exception;
@@ -39,11 +40,12 @@ public class RMIMessage {
 	/** Request messages **/
 	
 	/*Lookup Service message*/
-	public RMIMessage(MessageType type,String serviceName, Object [] params)
+	public RMIMessage(MessageType type,String serviceName, Object [] params, int objKey)
 	{ 
 		this.type = type;
 		this.serviceName = serviceName;
 		this.params = params;
+		this.key = objKey;
 	}
 	
 	/* Rebind */
@@ -62,6 +64,10 @@ public class RMIMessage {
 	}
 	
 	/** Getters */
+	
+	public int getKey() {
+		return key;
+	}
 	
 	public MessageType getType()
 	{

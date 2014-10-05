@@ -6,7 +6,6 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import edu.cmu.cs.cs440.hw1.MigratableProcess;
 
 
 /* This is the server in our RMI Application */
@@ -55,9 +54,12 @@ public class RMI {
 			}
 			ObjectInputStream in;
 			in = new ObjectInputStream(clientSocket.getInputStream());
-			int objKey = (Integer) in.readObject();
-			RemoteObjRef ror = tbl.lookup(objKey);
-
+			/*
+			 * Client sent an RMI Lookup message
+			 */
+			RMIMessage rm = (RMIMessage) in.readObject();
+			//RemoteObjRef ror = tbl.lookup(objKey); THE CLIENT PROBABLY DOES THE LOOKUP
+			RemoteObjRef ror = tbl.lookup(rm.getKey());
 			// (1) receives an invocation request.
 			// (2) creates a socket and input/output streams.
 			// (3) gets the invocation, in martiallled form.
