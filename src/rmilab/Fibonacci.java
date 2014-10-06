@@ -7,6 +7,7 @@ public class Fibonacci implements FibonacciInterface {
 	
 	public Fibonacci(int number) {
 		this.num = number;
+		// bind to the registry
 	}
 
 	public ArrayList<Integer> getFibonacciSeries() {
