@@ -1,19 +1,24 @@
 package rmilab;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.Socket;
 
 
 public class Fibonacci_skeleton {
-
-	public void stuff(String[] args) {
+	String host = "hostname";
+	int port = 2345;
+	public void stuff(String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		/* Unmarshal the array */
+		Socket s = new Socket(host, port);
 		Method method;
 		
 		/* DO WE NEED SOCKETS HERE? WHERE IS THE INPUT STREAM COMING FROM */
-        ObjectInputStream objectInput = remotecall.getInputStream();	/* ask ta */
+        ObjectInputStream objectInput = (ObjectInputStream) s.getInputStream();	/* ask ta */
         String[] methodInvocation= (String[])objectInput.readObject();
 		Class myObjectClass = Class.forName(methodInvocation[0]);
 		Constructor constructor = myObjectClass.getConstructor(new Class[] {
@@ -24,7 +29,7 @@ public class Fibonacci_skeleton {
         Object value = method.invoke(f);
         
         /* marshal the return value */
-		ObjectOutputStream objectOutput = remotecall.getOutputStream(); /* ask ta */
+		ObjectOutputStream objectOutput = (ObjectOutputStream) s.getOutputStream(); /* ask ta */
         objectOutput.writeObject(value);
 	}
 }
