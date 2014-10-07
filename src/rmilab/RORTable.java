@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Set;
 
 public class RORTable {
-  private static HashMap<Integer, RemoteObjRef> remoteObjects = new HashMap<Integer, RemoteObjRef>();
+  private static HashMap<String, RemoteObjRef> remoteObjects = new HashMap<String, RemoteObjRef>();
   public static final int PORTNUM = 1234;
   
-  public void bind(int objKey, RemoteObjRef obj)
+  public void bind(String objKey, RemoteObjRef obj)
   {
 	  if(!remoteObjects.containsKey(objKey))
 	  {
@@ -19,7 +19,7 @@ public class RORTable {
 		  System.out.println("There is already an object with the key in the registry");
   }
   
-  public  void unbind(int objKey)
+  public  void unbind(String objKey)
   {
 	  if(remoteObjects.containsKey(objKey))
 	  {
@@ -31,7 +31,7 @@ public class RORTable {
 		  System.out.println("There isn't an object registered with that key to unbind");
   }
   
-  public RemoteObjRef lookup(int objKey)
+  public RemoteObjRef lookup(String objKey)
   {
 	  if(remoteObjects.containsKey(objKey))
 	  {
@@ -47,7 +47,7 @@ public class RORTable {
 	  
   }
   
-  public Set<Integer> list()
+  public Set<String> list()
   {
 	  return remoteObjects.keySet();
   }
