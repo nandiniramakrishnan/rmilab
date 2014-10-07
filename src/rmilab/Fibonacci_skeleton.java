@@ -6,30 +6,42 @@ import java.util.ArrayList;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 
+import rmilab.utilities.FibonacciInterface;
 
+import rmilab.utilities.*;
 public class Fibonacci_skeleton {
-	String host = "hostname";
-	int port = 2345;
-	public void stuff(String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	static int port = 9999;
+	public static ArrayList<Integer> continueGettingFibonacciSeries() throws IOException, ClassNotFoundException, 
+	NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, 
+	IllegalArgumentException, InvocationTargetException {
 		/* Unmarshal the array */
-		Socket s = new Socket(host, port);
+		System.out.println("omg WE'RE IN THE SKELETON");
+		System.out.println("skeleton's hostname = "+(InetAddress.getLocalHost()).getHostName());
+		ServerSocket s = new ServerSocket(9999);
+		System.out.println("Serversocket is listening on port 9999 in the skeleton");
+		Socket clientSocket;
 		Method method;
+		while (true) {
+			clientSocket = s.accept();
+			System.out.println("connection has been made between stub and skeleton");
 		
 		/* DO WE NEED SOCKETS HERE? WHERE IS THE INPUT STREAM COMING FROM */
-        ObjectInputStream objectInput = (ObjectInputStream) s.getInputStream();	/* ask ta */
+        ObjectInputStream objectInput = new ObjectInputStream(clientSocket.getInputStream());	/* ask ta */
         String[] methodInvocation= (String[])objectInput.readObject();
-		Class myObjectClass = Class.forName(methodInvocation[0]);
-		Constructor constructor = myObjectClass.getConstructor(new Class[] {
-				Integer.class });
+		Class myObjectClass = Class.forName("rmilab.Fibonacci");
+		Constructor constructor = myObjectClass.getConstructor(new Class[] {});
 		Fibonacci f = (Fibonacci) constructor
-				.newInstance(0, args);
+				.newInstance();
         method = f.getClass().getMethod(methodInvocation[1]);
         Object value = method.invoke(f);
         
         /* marshal the return value */
-		ObjectOutputStream objectOutput = (ObjectOutputStream) s.getOutputStream(); /* ask ta */
+		ObjectOutputStream objectOutput = new ObjectOutputStream(clientSocket.getOutputStream()); /* ask ta */
         objectOutput.writeObject(value);
+		}
 	}
 }

@@ -2,79 +2,50 @@ package rmilab;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import rmilab.utilities.RemoteObjRef;
 
 
 /* This is the server in our RMI Application */
-public class RMI {
+public class RMI implements Serializable {
 	static String host;
-	static int port;
-
-	public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-		String InitialClassName = args[0];	/* Fibonacci */
-		String registryHost = args[1];
-		int registryPort = Integer.parseInt(args[2]);	
-		String serviceName = args[3];		/* What is the service name? the method name? */
-
-		host = (InetAddress.getLocalHost()).getHostName();	/* Host name of server */
-		port = 12345;	/* Port of the server. Hard-coded */
-
-		Class initialclass = Class.forName(InitialClassName);
-		Class initialskeleton = Class.forName(InitialClassName+"_skel");
-
-		// you should also create a remote object table here.
-		// it is a table of a ROR and a skeleton.
-		// as a hint, I give such a table's interface as RORtbl.java. 
-		RORTable tbl = new RORTable();
-
-		// DO A LOOK UP HERE? RETURN THE LOOKUP TO THE SERVER
-
-		// after that, you create one remote object of fibonacci.
-		Object o = initialclass.newInstance(); /* new Fibonacci() */
-
-		// then register it into the table.
-		//tbl.addObj(host, port, o);
-		// IS THIS THE SAME AS BINDING?
-
-		//tbl.bind(1, (RemoteObjRef) o);
-
-		// create a socket.
-		ServerSocket serverSoc = new ServerSocket(port);
+	static int port = 2694;
+	
+	public static void main(String[] args) throws IOException, ClassNotFoundException, 
+	InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
+		System.out.println("your hostname = "+(InetAddress.getLocalHost()).getHostName());
+		Registry tbl = new Registry();
+		System.out.println("Registry has been created");
+		
+		InetAddress ipAddress = InetAddress.getLocalHost();	/* Your IP Address. This is the server */
+		RemoteObjRef ror = new RemoteObjRef(ipAddress, 2694, "fib","Fibonacci");	/* Port number of the remote host */
+		System.out.println("Remote obj ref for fib="+ror);
+		Registry.bind("fib",ror);
+		
+		ServerSocket serverSoc = new ServerSocket(port);	/* ServerSocket is listening on this port */
+		System.out.println("Server has started listening on the serversocket port"); /* can't use 2694 for anything else */
+		RemoteObjRef abc;
 		while (true)
 		{
 			Socket clientSocket = null;
-			try {
-				clientSocket = serverSoc.accept();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			clientSocket = serverSoc.accept();
+			if (clientSocket != null) {
+				System.out.println("connection has been made");
 			}
-			ObjectInputStream in;
-			in = new ObjectInputStream(clientSocket.getInputStream());
-			/*
-			 * Client sent an RMI Lookup message
-			 */
-			RMIMessage rm = (RMIMessage) in.readObject();
-			//RemoteObjRef ror = tbl.lookup(objKey); THE CLIENT PROBABLY DOES THE LOOKUP
-			RemoteObjRef ror = tbl.lookup(rm.getKey());
-			// (1) receives an invocation request.
-			// (2) creates a socket and input/output streams.
-			// (3) gets the invocation, in martiallled form.
-			// (4) gets the real object reference from tbl.
-			// (5) Either:
-			//      -- using the interface name, asks the skeleton,
-			//         together with the object reference, to unmartial
-			//         and invoke the real object.
-			//      -- or do unmarshalling directly and involkes that
-			//         object directly.
-			// (6) receives the return value, which (if not marshalled
-			//     you should marshal it here) and send it out to the 
-			//     the source of the invoker.
-			// (7) closes the socket.
-			clientSocket.close();
+			ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
+			String key = (String)in.readObject();
+			System.out.println("Client requested this servicename:"+key);
+			abc = tbl.lookup(key);
+			System.out.println("Got it!   "+abc);
+			ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
+			out.writeObject(abc);
+			Fibonacci_skeleton.continueGettingFibonacciSeries();
 		}
 	}
 }

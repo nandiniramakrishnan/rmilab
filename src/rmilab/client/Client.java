@@ -1,23 +1,65 @@
 package rmilab.client;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Client {
+import rmilab.utilities.FibonacciInterface;
+import rmilab.utilities.RemoteObjRef;
 
-	public static void main(String[] args) {
-	      Scanner in = new Scanner(System.in);
-	      String request;
-	      System.out.println("Enter your request");
-	      System.out.println("<object-name> <registry-host> <registry-port> <service-name>");
-	      request = in.nextLine();
-	      String[] parts = request.split(" ");
-	      String initialClassName = parts[0];
-	      String registryHost = parts[1]; 
-	      String registryPort = parts[2];
-	      String serviceName = parts[3];
-	      // get registry
-	      // do lookup
-	      // localise ror
-	      // print return value
+public class Client implements Serializable{
+	
+	@SuppressWarnings("resource")
+	public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
+		
+		Scanner in = new Scanner(System.in);
+		String request, obj = null, registryHost = null, registryPort = null, 
+				serviceName = null;
+
+		System.out.println("Enter your request");
+		System.out.println("<object-name> <registry-host> <registry-port> <service-name>");
+		request = in.nextLine();
+		String[] parts = request.split(" ");
+		obj = parts[0]; 
+		registryHost = parts[1];
+		registryPort = parts[2];
+		serviceName = parts[3];
+		System.out.println(obj);
+		System.out.println(registryHost);
+		System.out.println(registryPort);
+		System.out.println(serviceName);
+		System.out.println("registryPort="+registryPort);
+		RemoteObjRef ror = (RemoteObjRef)performLookup(registryHost, Integer.parseInt(registryPort), 
+				serviceName);
+		System.out.println("Client: Here's you reference! "+ror);
+	    FibonacciInterface stub = (FibonacciInterface)ror.localise();
+	    ArrayList<Integer> result = stub.getFibonacciSeries();
+	    System.out.println(result);
 	}	
+
+	public static Object performLookup(String registryHost, int registryPort, 
+			String serviceName) throws UnknownHostException, IOException, 
+			ClassNotFoundException {
+		Socket s = new Socket(registryHost, registryPort);
+		ObjectOutputStream registryStream = new ObjectOutputStream(s.getOutputStream());
+        registryStream.writeObject(serviceName);
+        Object ror = getReference(s);
+        registryStream.close();
+        return ror;
+	}
+	
+	public static Object getReference(Socket s) throws IOException,
+	ClassNotFoundException {
+		ObjectInputStream referenceStream = new ObjectInputStream(s.getInputStream());	
+        Object ror = referenceStream.readObject();
+        return ror;
+	}
 }

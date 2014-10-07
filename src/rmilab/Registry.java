@@ -3,16 +3,18 @@ package rmilab;
 import java.util.HashMap;
 import java.util.Set;
 
-public class RORTable {
-  private static HashMap<Integer, RemoteObjRef> remoteObjects = new HashMap<Integer, RemoteObjRef>();
+import rmilab.utilities.RemoteObjRef;
+
+public class Registry {
+  private static HashMap<String, RemoteObjRef> remoteObjects = new HashMap<String, RemoteObjRef>();
   public static final int PORTNUM = 1234;
   
-  public void bind(int objKey, RemoteObjRef obj)
+  public static void bind(String serviceName, RemoteObjRef obj)
   {
-	  if(!remoteObjects.containsKey(objKey))
+	  if(!remoteObjects.containsKey(serviceName))
 	  {
-	    remoteObjects.put(objKey,obj);
-	    System.out.println("Object:" + objKey + " has been binded");
+	    remoteObjects.put(serviceName,obj);
+	    System.out.println("Object:" + serviceName + " has been binded");
 	  }
 	  
 	  else
@@ -31,23 +33,23 @@ public class RORTable {
 		  System.out.println("There isn't an object registered with that key to unbind");
   }
   
-  public RemoteObjRef lookup(int objKey)
+  public RemoteObjRef lookup(String serviceName)
   {
-	  if(remoteObjects.containsKey(objKey))
+	  if(remoteObjects.containsKey(serviceName))
 	  {
 		  System.out.println("Found Object");
-		  return remoteObjects.get(objKey);
+		  return remoteObjects.get(serviceName);
 	  }
 	  
 	  else
 	  {
-		  System.out.println("Can't find Object:" + objKey + " in lookup");
+		  System.out.println("Can't find Object:" + serviceName + " in lookup");
 		  return null;
 	  }
 	  
   }
   
-  public Set<Integer> list()
+  public Set<String> list()
   {
 	  return remoteObjects.keySet();
   }
