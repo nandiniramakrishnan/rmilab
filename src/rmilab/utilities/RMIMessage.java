@@ -1,4 +1,4 @@
-package rmilab;
+package rmilab.utilities;
 
 public class RMIMessage {
    
@@ -6,7 +6,8 @@ public class RMIMessage {
 		FOUND, EXCEPTION, RETURN, LOOKUP, REBIND, UNBIND;
 		
 	}
-	private MessageType type;
+	private String key;
+	private String type;
 	private RemoteObjRef obj;
 	private Exception exception;
 	private Object returnValue;
@@ -16,21 +17,21 @@ public class RMIMessage {
     /* Response messages */
 	
 	/* Found RemoteObject Message  */
-	public RMIMessage(MessageType type, RemoteObjRef obj)
+	public RMIMessage(String type, RemoteObjRef obj)
 	{
 		this.type = type;
 		this.obj = obj;
 	}
 	
 	/* Exception Message*/
-	public RMIMessage(MessageType type, Exception e)
+	public RMIMessage(String type, Exception e)
 	{
 		this.type = type;
 		exception = e;
 	}
 	
 	/* Return Value Message */
-	public RMIMessage(MessageType type, Object returnValue)
+	public RMIMessage(String type, Object returnValue)
 	{
 	  this.type = type;
 	  this.returnValue = returnValue;
@@ -39,7 +40,7 @@ public class RMIMessage {
 	/** Request messages **/
 	
 	/*Lookup Service message*/
-	public RMIMessage(MessageType type,String serviceName, Object [] params)
+	public RMIMessage(String type,String serviceName, Object [] params)
 	{ 
 		this.type = type;
 		this.serviceName = serviceName;
@@ -47,7 +48,7 @@ public class RMIMessage {
 	}
 	
 	/* Rebind */
-	public RMIMessage(MessageType type, String serviceName, RemoteObjRef obj)
+	public RMIMessage(String type, String serviceName, RemoteObjRef obj)
 	{
 		this.type = type;
 		this.serviceName = serviceName;
@@ -55,7 +56,7 @@ public class RMIMessage {
 	}
 	
 	/* Unbind */
-	public RMIMessage(MessageType type, String serviceName)
+	public RMIMessage(String type, String serviceName)
 	{
 		this.type = type;
 		this.serviceName = serviceName;
@@ -63,7 +64,11 @@ public class RMIMessage {
 	
 	/** Getters */
 	
-	public MessageType getType()
+	public String getKey() {
+		return key;
+	}
+	
+	public String getType()
 	{
 		return type;
 	}

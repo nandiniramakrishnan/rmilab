@@ -1,4 +1,4 @@
-package rmilab;
+package rmilab.utilities;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
