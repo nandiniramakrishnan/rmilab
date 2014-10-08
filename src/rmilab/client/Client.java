@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import rmilab.utilities.FibonacciInterface;
+import rmilab.utilities.RMIMessage;
+import rmilab.utilities.RMIMessageDelivery;
 import rmilab.utilities.RemoteObjRef;
 
 public class Client implements Serializable{
@@ -48,18 +50,29 @@ public class Client implements Serializable{
 	public static Object performLookup(String registryHost, int registryPort, 
 			String serviceName) throws UnknownHostException, IOException, 
 			ClassNotFoundException {
+		RemoteObjRef ror;
+		RMIMessage msg = new RMIMessage();
+		msg.type="IDENTIFIER";
+		msg.serviceName = serviceName;
+		RMIMessageDelivery rmd = new RMIMessageDelivery(registryHost, registryPort);
+		rmd.sendMessage(msg);
+		RMIMessage refmsg = rmd.getMessage();
+		ror = refmsg.getRemoteObject();
+		/*
 		Socket s = new Socket(registryHost, registryPort);
 		ObjectOutputStream registryStream = new ObjectOutputStream(s.getOutputStream());
         registryStream.writeObject(serviceName);
-        Object ror = getReference(s);
-        registryStream.close();
+        
+		*/
+        
+        //registryStream.close();
         return ror;
 	}
-	
+	/*
 	public static Object getReference(Socket s) throws IOException,
 	ClassNotFoundException {
 		ObjectInputStream referenceStream = new ObjectInputStream(s.getInputStream());	
         Object ror = referenceStream.readObject();
         return ror;
-	}
+	}*/
 }

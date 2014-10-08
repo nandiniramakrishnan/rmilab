@@ -1,22 +1,30 @@
 package rmilab.utilities;
 
-public class RMIMessage {
+import java.io.Serializable;
+
+public class RMIMessage implements Serializable{
    
 	public enum MessageType{
 		FOUND, EXCEPTION, RETURN, LOOKUP, REBIND, UNBIND;
 		
 	}
 	private String key;
-	private String type;
+	public String type;
 	private RemoteObjRef obj;
 	private Exception exception;
 	private Object returnValue;
-	private String serviceName;
+	public String serviceName;
 	private Object[] params;
+	public String interfaceName;
+	
+	/* Method invocation request */	
 	
     /* Response messages */
+	public RMIMessage() {
+		
+	}
 	
-	/* Found RemoteObject Message  */
+	/* Found RemoteObject Message, and stub to skeleton method invocation  */
 	public RMIMessage(String type, RemoteObjRef obj)
 	{
 		this.type = type;

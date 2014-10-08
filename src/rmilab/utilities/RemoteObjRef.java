@@ -12,12 +12,12 @@ public class RemoteObjRef implements Serializable {
 	private InetAddress ipAddress;
 	private int portNum;
 	private String interfaceName;
-	private String identifier;
+	private String serviceName;
 	public RemoteObjRef(InetAddress ipAddress, int portNum, String identifier, String interfaceName)
 	{
 		this.ipAddress = ipAddress;
 		this.portNum = portNum;
-		this.identifier = identifier;
+		this.serviceName = identifier;
 		this.interfaceName = interfaceName;
 	}
 	

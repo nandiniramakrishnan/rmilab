@@ -17,10 +17,12 @@ public class Fibonacci_stub implements FibonacciInterface{
 		 * marshal an array containing object name, method name, arguments
 		 */
 		ArrayList<Integer> al;
+
 		InetAddress ip = InetAddress.getLocalHost();
 		int port = 9999;
 		/* create socket? */
 		Socket s = new Socket(ip, 9999);
+		// USE RMI MESSAGE FOR THIS INSTEAD
 		String[] methodInvocation = {"Fibonacci","getFibonacciSeries",Integer.toString(10)};
 		ObjectOutputStream objectOutput = new ObjectOutputStream(s.getOutputStream()); /* ask ta */
         objectOutput.writeObject(methodInvocation);
