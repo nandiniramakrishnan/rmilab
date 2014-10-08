@@ -17,7 +17,7 @@ public class RemoteObjRef implements Serializable {
 	{
 		this.ipAddress = ipAddress;
 		this.portNum = portNum;
-		this.serviceName = identifier;
+		this.setServiceName(identifier);
 		this.interfaceName = interfaceName;
 	}
 	
@@ -47,6 +47,14 @@ public class RemoteObjRef implements Serializable {
 			System.out.println("stub is not null! stub="+stub);
 		}
 		return stub;
+	}
+
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
 	}
 
 }
