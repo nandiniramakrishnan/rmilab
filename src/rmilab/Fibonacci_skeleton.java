@@ -13,15 +13,15 @@ import java.net.Socket;
 
 import rmilab.utilities.*;
 public class Fibonacci_skeleton {
-	//static int port = 9999;
 	static ServerSocket s;
 	public Fibonacci_skeleton(ServerSocket s) {
 		
-		this.s = ServerSocket(9999);
-	}
-	private ServerSocket ServerSocket(int i) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			Fibonacci_skeleton.s = new ServerSocket(9999);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public static ArrayList<Integer> getFibonacciSeries() throws IOException, ClassNotFoundException, 
 	NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, 

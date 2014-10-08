@@ -27,7 +27,7 @@ public class RMIMessageDelivery implements Serializable  {
 
 	private static final long serialVersionUID = -1808777860083306760L;
 
-	public static void sendMessage(RMIMessage message) throws IOException
+	public void sendMessage(RMIMessage message) throws IOException
      {
     	 Object packagedMessage = (Object) message;
     	 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
@@ -35,7 +35,7 @@ public class RMIMessageDelivery implements Serializable  {
     	 //socket.close();
      }
      
-     public static RMIMessage getMessage() throws IOException, ClassNotFoundException
+     public RMIMessage getMessage() throws IOException, ClassNotFoundException
      {
     	 RMIMessage message = null;
     	 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());

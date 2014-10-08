@@ -9,6 +9,7 @@ public class RMIMessage implements Serializable{
 		
 	}
 	private String key;
+
 	public MessageType type;
 	private RemoteObjRef obj;
 	private Exception exception;
@@ -16,7 +17,7 @@ public class RMIMessage implements Serializable{
 	public String serviceName;
 	public String methodName;
 	private Object[] params;
-	public String interfaceName;
+	private String interfaceName;
 	
 	/* Method invocation request */	
 	
@@ -61,7 +62,7 @@ public class RMIMessage implements Serializable{
 	public RMIMessage(MessageType type, String serviceName, RemoteObjRef obj)
 	{
 		this.type = type;
-		this.serviceName = serviceName;
+		this.setServiceName(serviceName);
 		this.obj = obj;
 	}
 	
@@ -69,7 +70,7 @@ public class RMIMessage implements Serializable{
 	public RMIMessage(MessageType type, String serviceName)
 	{
 		this.type = type;
-		this.serviceName = serviceName;
+		this.setServiceName(serviceName);
 	}
 	
 	/** Getters */
@@ -108,10 +109,36 @@ public class RMIMessage implements Serializable{
 		return params;
 	}
 	
+
 	public String getMethodName()
 	{
 		return methodName;
 	}
+	public String getInterfaceName() {
+		return interfaceName;
+	}
+	
+/*
+	public void setInterfaceName(String interfaceName) {
+		this.interfaceName = interfaceName;
+	}*/
+
+	public void setInterfaceName(String interfaceName) {
+		this.interfaceName = interfaceName;
+	}
+
+	public void setMethodName(String methodName) {
+		this.methodName = methodName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+
+	public void setParams(Object[] params) {
+		this.params = params;
+	}
+
 	
 	
 	

@@ -24,23 +24,28 @@ public class Client implements Serializable{
 		
 		Scanner in = new Scanner(System.in);
 		String request, obj = null, registryHost = null, registryPort = null, 
-				serviceName = null;
+				serviceName = null, methodName = null;
+		int argNo = 0;
 
 		System.out.println("Enter your request");
-		System.out.println("<object-name> <registry-host> <registry-port> <service-name>");
+		System.out.println("<object-name> <registry-host> <registry-port> <service-name> <method-name> <args...>");
 		request = in.nextLine();
 		String[] parts = request.split(" ");
 		obj = parts[0]; 
 		registryHost = parts[1];
 		registryPort = parts[2];
 		serviceName = parts[3];
+		methodName = parts[4];
+		argNo = Integer.parseInt(parts[5]);
 		System.out.println(obj);
 		System.out.println(registryHost);
 		System.out.println(registryPort);
 		System.out.println(serviceName);
+		System.out.println(methodName+" args:"+argNo);
 		System.out.println("registryPort="+registryPort);
 		RemoteObjRef ror = (RemoteObjRef)performLookup(registryHost, Integer.parseInt(registryPort), 
-				serviceName);
+				serviceName, methodName, argNo);
+		
 		System.out.println("Client: Here's you reference! "+ror);
 	    FibonacciInterface stub = (FibonacciInterface)ror.localise();
 	    ArrayList<Integer> result = stub.getFibonacciSeries();
@@ -48,16 +53,19 @@ public class Client implements Serializable{
 	}	
 
 	public static Object performLookup(String registryHost, int registryPort, 
-			String serviceName) throws UnknownHostException, IOException, 
+			String serviceName,String methodName, int argNo) throws UnknownHostException, IOException, 
 			ClassNotFoundException {
 		RemoteObjRef ror;
 		RMIMessage msg = new RMIMessage();
-		msg.type="IDENTIFIER";
-		msg.serviceName = serviceName;
+		msg.setServiceName(serviceName);
+		msg.setMethodName(methodName);
+		msg.setParams(new Object[]{new Integer(argNo)}); 
 		RMIMessageDelivery rmd = new RMIMessageDelivery(registryHost, registryPort);
 		rmd.sendMessage(msg);
 		RMIMessage refmsg = rmd.getMessage();
+		System.out.println("REFMSG!!!!: "+refmsg);
 		ror = refmsg.getRemoteObject();
+		System.out.println("ROOOOR!!!! : "+ror);
 		/*
 		Socket s = new Socket(registryHost, registryPort);
 		ObjectOutputStream registryStream = new ObjectOutputStream(s.getOutputStream());

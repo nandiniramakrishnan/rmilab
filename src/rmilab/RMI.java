@@ -28,25 +28,32 @@ public class RMI implements Serializable {
 		InetAddress ipAddress = InetAddress.getLocalHost();	/* Your IP Address. This is the server */
 		RemoteObjRef ror = new RemoteObjRef(ipAddress, port, "fib","Fibonacci");	/* Port number of the remote host */
 		Registry.bind("fib",ror);
-		
+		System.out.println("Your reference is binded. ror="+ror);
 		ServerSocket serverSoc = new ServerSocket(port);	/* ServerSocket is listening on this port */
 		System.out.println("Server has started listening on the port 1234"); /* can't use 1234 for anything else */
 		RemoteObjRef abc;
 		while (true)
 		{
 			Socket clientSocket = null;
+			
+			// thread begin
 			clientSocket = serverSoc.accept();
 			RMIMessageDelivery rmd = new RMIMessageDelivery(clientSocket);
-			RMIMessage identifier = RMIMessageDelivery.getMessage();
+			RMIMessage identifier = rmd.getMessage();
 			/*ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
 			String key = (String)in.readObject();*/
 			String key = identifier.getServiceName();
+<<<<<<< HEAD
 			abc = tbl.lookup(key); /*this is the remore obj ref */
+=======
+			String methodName = identifier.getMethodName();
+			Object[] arglist = identifier.getParams();
+			abc = tbl.lookup(key);
+>>>>>>> 5ffcac607eaa0979b6cd9b85bf8a448253e8c731
 			String interfaceName = abc.getInterfaceName();
 			RMIMessage msg = new RMIMessage();
-			msg.type = "INTERFACENAME";
-			msg.interfaceName = interfaceName;
-			RMIMessageDelivery.sendMessage(msg);
+			msg.setInterfaceName(interfaceName);
+			rmd.sendMessage(msg);
 			/*
 			ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 			out.writeObject(abc);*/
@@ -56,6 +63,10 @@ public class RMI implements Serializable {
 			Object skeleton = constructor.newInstance(new ServerSocket());
 			System.out.println("here's your skeleton! "+skeleton);
 			//Fibonacci_skeleton.continueGettingFibonacciSeries();
+	        Method method = c.getMethod(methodName);
+	        method.invoke(skeleton);
+			
+			// THREAD END
 		}
 	}
 }
