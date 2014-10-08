@@ -9,11 +9,12 @@ public class RMIMessage implements Serializable{
 		
 	}
 	private String key;
-	public String type;
+	public MessageType type;
 	private RemoteObjRef obj;
 	private Exception exception;
 	private Object returnValue;
 	public String serviceName;
+	public String methodName;
 	private Object[] params;
 	public String interfaceName;
 	
@@ -25,21 +26,21 @@ public class RMIMessage implements Serializable{
 	}
 	
 	/* Found RemoteObject Message, and stub to skeleton method invocation  */
-	public RMIMessage(String type, RemoteObjRef obj)
+	public RMIMessage(MessageType type, RemoteObjRef obj)
 	{
 		this.type = type;
 		this.obj = obj;
 	}
 	
 	/* Exception Message*/
-	public RMIMessage(String type, Exception e)
+	public RMIMessage(MessageType type, Exception e)
 	{
 		this.type = type;
 		exception = e;
 	}
 	
 	/* Return Value Message */
-	public RMIMessage(String type, Object returnValue)
+	public RMIMessage(MessageType type, Object returnValue)
 	{
 	  this.type = type;
 	  this.returnValue = returnValue;
@@ -48,15 +49,16 @@ public class RMIMessage implements Serializable{
 	/** Request messages **/
 	
 	/*Lookup Service message*/
-	public RMIMessage(String type,String serviceName, Object [] params)
+	public RMIMessage(MessageType type,String serviceName, String methodName, Object [] params)
 	{ 
 		this.type = type;
 		this.serviceName = serviceName;
+		this.methodName = methodName;
 		this.params = params;
 	}
 	
 	/* Rebind */
-	public RMIMessage(String type, String serviceName, RemoteObjRef obj)
+	public RMIMessage(MessageType type, String serviceName, RemoteObjRef obj)
 	{
 		this.type = type;
 		this.serviceName = serviceName;
@@ -64,7 +66,7 @@ public class RMIMessage implements Serializable{
 	}
 	
 	/* Unbind */
-	public RMIMessage(String type, String serviceName)
+	public RMIMessage(MessageType type, String serviceName)
 	{
 		this.type = type;
 		this.serviceName = serviceName;
@@ -76,7 +78,7 @@ public class RMIMessage implements Serializable{
 		return key;
 	}
 	
-	public String getType()
+	public MessageType getType()
 	{
 		return type;
 	}
@@ -104,6 +106,11 @@ public class RMIMessage implements Serializable{
 	public Object[] getParams()
 	{
 		return params;
+	}
+	
+	public String getMethodName()
+	{
+		return methodName;
 	}
 	
 	

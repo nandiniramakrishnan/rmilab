@@ -41,7 +41,7 @@ public class RMI implements Serializable {
 			/*ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
 			String key = (String)in.readObject();*/
 			String key = identifier.getServiceName();
-			abc = tbl.lookup(key);
+			abc = tbl.lookup(key); /*this is the remore obj ref */
 			String interfaceName = abc.getInterfaceName();
 			RMIMessage msg = new RMIMessage();
 			msg.type = "INTERFACENAME";
