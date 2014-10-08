@@ -3,6 +3,7 @@ import java.io.IOException;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -17,10 +18,12 @@ public class Fibonacci_stub implements FibonacciInterface{
 		 * marshal an array containing object name, method name, arguments
 		 */
 		ArrayList<Integer> al;
-		String host = "Nandinis-MacBook-Pro.local";
+		InetAddress ipaddress = InetAddress.getLocalHost();
 		int port = 9999;
 		/* create socket? */
-		Socket s = new Socket(host, 9999);
+		Socket s = new Socket(ipaddress, port);
+		
+		// USE RMI MESSAGE FOR THIS INSTEAD
 		String[] methodInvocation = {"Fibonacci","getFibonacciSeries",Integer.toString(10)};
 		ObjectOutputStream objectOutput = new ObjectOutputStream(s.getOutputStream()); /* ask ta */
         objectOutput.writeObject(methodInvocation);

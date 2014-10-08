@@ -10,18 +10,25 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import rmilab.utilities.FibonacciInterface;
 
 import rmilab.utilities.*;
 public class Fibonacci_skeleton {
-	static int port = 9999;
-	public static ArrayList<Integer> continueGettingFibonacciSeries() throws IOException, ClassNotFoundException, 
+	//static int port = 9999;
+	static ServerSocket s;
+	public Fibonacci_skeleton(ServerSocket s) {
+		
+		this.s = ServerSocket(9999);
+	}
+	private ServerSocket ServerSocket(int i) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public static ArrayList<Integer> getFibonacciSeries() throws IOException, ClassNotFoundException, 
 	NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, 
 	IllegalArgumentException, InvocationTargetException {
 		/* Unmarshal the array */
 		System.out.println("omg WE'RE IN THE SKELETON");
 		System.out.println("skeleton's hostname = "+(InetAddress.getLocalHost()).getHostName());
-		ServerSocket s = new ServerSocket(9999);
 		System.out.println("Serversocket is listening on port 9999 in the skeleton");
 		Socket clientSocket;
 		Method method;

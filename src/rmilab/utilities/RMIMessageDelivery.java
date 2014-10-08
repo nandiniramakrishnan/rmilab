@@ -5,24 +5,41 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class RMIMessageDelivery implements Serializable  {
-
+	static Socket socket;
+	public RMIMessageDelivery(Socket s) {
+		this.socket = s;
+	}
+	
+	public RMIMessageDelivery(String host, int port) {
+		try {
+			this.socket = new Socket(host, port);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	private static final long serialVersionUID = -1808777860083306760L;
 
-	public void sendMessage(Socket s, RMIMessage message) throws IOException
+	public static void sendMessage(RMIMessage message) throws IOException
      {
     	 Object packagedMessage = (Object) message;
-    	 ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
+    	 ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
     	 out.writeObject(packagedMessage);
+    	 //socket.close();
      }
      
-     public Object getMessage(Socket s) throws IOException, ClassNotFoundException
+     public static RMIMessage getMessage() throws IOException, ClassNotFoundException
      {
-    	 Object message = null;
-    	 ObjectInputStream in = new ObjectInputStream(s.getInputStream());
-    	 message = (Object) in.readObject();
+    	 RMIMessage message = null;
+    	 ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+    	 message = (RMIMessage) in.readObject();
     	 return message;
      }
      
