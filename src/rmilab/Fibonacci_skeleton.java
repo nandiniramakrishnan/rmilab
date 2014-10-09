@@ -20,7 +20,7 @@ public class Fibonacci_skeleton {
 	public Fibonacci_skeleton(ServerSocket s) {
 
 		try {
-			Fibonacci_skeleton.s = new ServerSocket(9999);
+			Fibonacci_skeleton.s = new ServerSocket(5678);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
