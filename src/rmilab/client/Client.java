@@ -12,6 +12,7 @@ import rmilab.utilities.RMIMessage;
 import rmilab.utilities.RMIMessage.MessageType;
 import rmilab.utilities.RMIMessageDelivery;
 import rmilab.utilities.RemoteObjRef;
+import rmilab.utilities.ReverseInterface;
 
 /**
  * This Client gets the appropriate information from standard-in to make
@@ -68,16 +69,28 @@ public class Client implements Serializable {
 			/* Print confirmation of found reference */
 			System.out.println("Client: Here's you reference! " + ror);
 
-			/* Create and localize stub */
-			FibonacciInterface stub = (FibonacciInterface) ror
-					.localise(registryHost);
+			/* This is for Example 1: Fib */
+			if (serviceName.equals("fib")) {
+				/* Create and localize stub */
+				FibonacciInterface stub = (FibonacciInterface) ror
+						.localise(registryHost);
 
-			/* Call getFibonacciSeries method on the stub */
-			ArrayList<Integer> result = stub
-					.getFibonacciSeries((Integer) params[0]);
+				/* Call getFibonacciSeries method on the stub */
+				ArrayList<Integer> result = stub
+						.getFibonacciSeries((Integer) params[0]);
+				System.out.println(result);
+			}
+			/* This is for Example 2: Rev */
+			else if (serviceName.equals("rev")) {
+				ReverseInterface stub = (ReverseInterface) ror
+						.localise(registryHost);
+				String result = stub.reverseString((String) params[0]);
+				System.out.println(result);
+			}
 
-			/* Print out result */
-			System.out.println(result);
+			else {
+				System.out.println("Invalid Service Name");
+			}
 
 			/* See if this client wants to make any more requests */
 			System.out
