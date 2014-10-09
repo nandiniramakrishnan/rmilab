@@ -31,7 +31,7 @@ public class ReverseString_skeleton {
 	public ReverseString_skeleton() {
 
 		try {
-			Fibonacci_skeleton.s = new ServerSocket(9999);
+			ReverseString_skeleton.s = new ServerSocket(9999);
 		} catch (IOException e) {
 
 		}
