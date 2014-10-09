@@ -10,6 +10,7 @@ import rmilab.utilities.FibonacciInterface;
 import rmilab.utilities.RMIMessage;
 import rmilab.utilities.RMIMessage.MessageType;
 import rmilab.utilities.RMIMessageDelivery;
+import rmilab.utilities.ReverseInterface;
 
 /**
  * The ReverseString stub is on the client side and is responsible for making
@@ -19,7 +20,7 @@ import rmilab.utilities.RMIMessageDelivery;
  * @author Nandini Ramakrishnan and Shri Karthikeyan
  * 
  */
-public class ReverseString_stub implements FibonacciInterface {
+public class ReverseString_stub implements ReverseInterface {
 	static final int PORT = 9999;
 	String hostname;
 
@@ -36,15 +37,14 @@ public class ReverseString_stub implements FibonacciInterface {
 	/*
 	 * @see rmilab.utilities.FibonacciInterface#getFibonacciSeries(int)
 	 */
-	public ArrayList<Integer> getFibonacciSeries(int num) throws IOException,
-			ClassNotFoundException {
+	public String reverseString(String str) throws IOException, ClassNotFoundException  {
 
 		/* Create a socket connection with the Skeleton */
 		Socket s = new Socket(hostname, PORT);
 
 		/* Wrap the parameters */
 		Object[] params = new Object[1];
-		params[0] = num;
+		params[0] = str;
 
 		RMIMessage methodInvocation = new RMIMessage(MessageType.METHOD, "rev",
 				"rmilab.ReverseString", "reverseString", params);
@@ -58,10 +58,11 @@ public class ReverseString_stub implements FibonacciInterface {
 
 		/* Process response from skeleton */
 		if (response.getType() == MessageType.RETURN)
-			return (ArrayList<Integer>) response.getReturnValue();
+			return (String) response.getReturnValue();
 		else
 			return null;
 	}
+
 
 }
 
