@@ -14,16 +14,26 @@ import java.net.Socket;
 import rmilab.utilities.*;
 import rmilab.utilities.RMIMessage.MessageType;
 
+/**
+ * 
+ * @author Nandini Ramakrishnan and Shri Karthikeyan This class defines the
+ *         server side skeleton for fibonacci that is responsible for making the
+ *         fibonacci computations and sending them to the fibonacci stub.
+ * 
+ */
 public class Fibonacci_skeleton {
-    static ServerSocket s;
+	static ServerSocket s;
 
-	public Fibonacci_skeleton(ServerSocket s) {
+	/*
+	 * Constructor to create an instance of the fibonacci skeleton instance
+	 * Creates a new Socket connection
+	 */
+	public Fibonacci_skeleton() {
 
 		try {
 			Fibonacci_skeleton.s = new ServerSocket(5678);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
+
 		}
 	}
 
@@ -31,42 +41,43 @@ public class Fibonacci_skeleton {
 			ClassNotFoundException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
-		/* Unmarshal the array */
-		//s = new ServerSocket(5678);
-		System.out.println("omg WE'RE IN THE SKELETON");
-		System.out.println("skeleton's hostname = "
-				+ (InetAddress.getLocalHost()).getHostName());
-		System.out
-				.println("Serversocket is listening on port 9999 in the skeleton");
+
+        /* Notice that we are in skeleton */
+		System.out.println("Serversocket is listening on port 5678 in the skeleton");
 		Socket clientSocket;
 		Method method;
+		
+		/* Continually listen for any client requests via stub */
 		while (true) {
 			clientSocket = s.accept();
-			System.out
-					.println("connection has been made between stub and skeleton");
+			System.out.println("Connection has been made between stub and skeleton");
+			System.out.println("---------------------------------------------------");
+			
+			/* Read in message request from stub */
+			RMIMessageDelivery rmd = new RMIMessageDelivery(clientSocket);
+			RMIMessage inputMessage = rmd.getMessage();
+			RMIMessage outputMessage ;
 
-			/* DO WE NEED SOCKETS HERE? WHERE IS THE INPUT STREAM COMING FROM */
-			ObjectInputStream objectInput = new ObjectInputStream(
-					clientSocket.getInputStream()); /* ask ta */
-			RMIMessage inputMessage = (RMIMessage) objectInput.readObject();
-			// String[] methodInvocation= (String[])objectInput.readObject();
+			/* Process method request and perform computation */
 			if (inputMessage.getType() == MessageType.METHOD) {
 				Class myObjectClass = Class.forName("rmilab.Fibonacci");
 				Constructor constructor = myObjectClass
 						.getConstructor(new Class[] {});
 				Fibonacci f = (Fibonacci) constructor.newInstance();
-				/*
-			    Method  method = c.getMethod ("setParam", N[].class);
-			    method.invoke(t, (Object) new N[]{});
-				*/
-				method = f.getClass().getMethod(inputMessage.getMethodName(), int.class);
+				method = f.getClass().getMethod(inputMessage.getMethodName(),
+						int.class);
 				Object value = method.invoke(f, inputMessage.getParams()[0]);
-				RMIMessage outputMessage = new RMIMessage(MessageType.RETURN,
+			    outputMessage = new RMIMessage(MessageType.RETURN,
 						value);
-				/* marshal the return value */
-				ObjectOutputStream objectOutput = new ObjectOutputStream(
-						clientSocket.getOutputStream()); /* ask ta */
-				objectOutput.writeObject(outputMessage);
+                /* Return output of method */
+				rmd.sendMessage(outputMessage);
+			}
+			
+			/* Unexpected request */
+			else
+			{
+				outputMessage = new RMIMessage(MessageType.EXCEPTION, "Unable to make request");
+				rmd.sendMessage(outputMessage);
 			}
 		}
 	}

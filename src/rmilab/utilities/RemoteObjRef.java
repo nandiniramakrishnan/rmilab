@@ -3,72 +3,85 @@ package rmilab.utilities;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 
+/**
+ * The RemoteObjRef class is an object that represents the remote object
+ * reference. It has key attributes of a remote object reference such as the
+ * ipAddress, portNum, identifier, and interfaceName.
+ * 
+ * @author Shri Karthikeyan and Nandini Ramakrishnan
+ * 
+ */
 public class RemoteObjRef implements Serializable {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -2221935140598730230L;
 	private InetAddress ipAddress;
 	private int portNum;
 	private String interfaceName;
 	private String serviceName;
-	public RemoteObjRef(InetAddress ipAddress, int portNum, String identifier, String interfaceName)
-	{
+
+	/**
+	 * Constructor for RemoteObjRef class
+	 * 
+	 * @param ipAddress
+	 *            - ipAddress of where the ror resides
+	 * @param portNum
+	 *            - port Num of where it came from
+	 * @param identifier
+	 *            - the indentifier/key in the registry table
+	 * @param interfaceName
+	 *            - name of the interface of ror
+	 */
+	public RemoteObjRef(InetAddress ipAddress, int portNum, String serviceName,
+			String interfaceName) {
 		this.ipAddress = ipAddress;
 		this.portNum = portNum;
-		this.setServiceName(identifier);
+		this.serviceName = serviceName;
 		this.interfaceName = interfaceName;
 	}
-	
-	public InetAddress getIpAddress()
-	{
+
+	public InetAddress getIpAddress() {
 		return ipAddress;
 	}
-	
-	public int getPortNum()
-	{
+
+	public int getPortNum() {
 		return portNum;
 	}
-	
-	
-	public String getInterfaceName()
-	{
+
+	public String getInterfaceName() {
 		return interfaceName;
-	}
-	
-	public Object localise(String hostname) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException
-	{
-/*
-		Object skeleton = constructor.newInstance(new ServerSocket());
-		System.out.println("here's your skeleton! "+skeleton);
-		//Fibonacci_skeleton.continueGettingFibonacciSeries();
-        Method method = c.getMethod(methodName);
-        method.invoke(skeleton);
-	*/	
-		
-		System.out.println("interfaceName="+interfaceName);
-		/* Returns the class object associated with the class or interface */
-		Class c = Class.forName("rmilab.client."+interfaceName + "_stub");
-		Constructor constructor = c.getDeclaredConstructor(String.class);
-		Object stub = constructor.newInstance(hostname);
-		//Object stub = c.newInstance();
-		if (stub != null) {
-			System.out.println("stub is not null! stub="+stub);
-		}
-		return stub;
 	}
 
 	public String getServiceName() {
 		return serviceName;
 	}
 
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
+	/**
+	 * Method localizes the remote object on a computer with a given hostname
+	 * and returns the stub of the ror for that host.
+	 * 
+	 * @param hostname
+	 *            - Given the hostname of the object where ror should be
+	 *            localised.
+	 * @return - stub of the ror
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws NoSuchMethodException
+	 * @throws SecurityException
+	 * @throws IllegalArgumentException
+	 * @throws InvocationTargetException
+	 */
+	public Object localise(String hostname) throws ClassNotFoundException,
+			InstantiationException, IllegalAccessException,
+			NoSuchMethodException, SecurityException, IllegalArgumentException,
+			InvocationTargetException {
+		/* Returns the class object associated with the class or interface */
+		Class c = Class.forName("rmilab.client." + interfaceName + "_stub");
+		Constructor constructor = c.getDeclaredConstructor(String.class);
+		Object stub = constructor.newInstance(hostname);
+		return stub;
 	}
 
 }

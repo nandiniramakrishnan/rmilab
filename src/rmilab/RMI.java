@@ -2,86 +2,55 @@ package rmilab;
 
 import java.io.IOException;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import rmilab.utilities.RMIMessage;
-import rmilab.utilities.RMIMessage.MessageType;
-import rmilab.utilities.RMIMessageDelivery;
 import rmilab.utilities.RemoteObjRef;
 
-
-/* This is the server in our RMI Application */
+/**
+ * @author Nandini Ramakrishnan and Shri Karthikeyan The RMI class starts the
+ *         registry and server and listens for incoming client requests. When
+ *         client requests come in, it starts a new thread in order to process
+ *         multiple requests from various clients.
+ * 
+ */
 public class RMI implements Serializable {
+	private static final long serialVersionUID = 1L;
 	static int port = 1234;
-	
-	public static void main(String[] args) throws IOException, ClassNotFoundException, 
-	InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
-		System.out.println("your hostname = "+(InetAddress.getLocalHost()).getHostName());
+
+	public static void main(String[] args) throws IOException,
+			ClassNotFoundException, InstantiationException,
+			IllegalAccessException, NoSuchMethodException, SecurityException,
+			IllegalArgumentException, InvocationTargetException {
+		/* Registry and Server's host name */
+		System.out.println("your hostname = "
+				+ (InetAddress.getLocalHost()).getHostName());
+
+		/* Start Registry */
 		Registry tbl = new Registry();
-		
-		InetAddress ipAddress = InetAddress.getLocalHost();	/* Your IP Address. This is the server */
-		RemoteObjRef ror = new RemoteObjRef(ipAddress, port, "fib","Fibonacci");	/* Port number of the remote host */
-		Registry.bind("fib",ror);
-		System.out.println("Your reference is binded. ror="+ror);
-		ServerSocket serverSoc = new ServerSocket(port);	/* ServerSocket is listening on this port */
-		System.out.println("Server has started listening on the port 1234"); /* can't use 1234 for anything else */
-		RemoteObjRef remoteObject;
-		while (true)
-		{
+
+		/* IP Address of the server */
+		InetAddress ipAddress = InetAddress.getLocalHost();
+
+		/* Bind examples to the registry */
+		RemoteObjRef ror = new RemoteObjRef(ipAddress, port, "fib", "Fibonacci");
+		Registry.bind("fib", ror);
+		System.out.println("Your reference is binded. ror=" + ror);
+
+		/* Start Server */
+		ServerSocket serverSoc = new ServerSocket(port);
+		System.out.println("Server has started listening on the port 1234");
+
+		/* Listen for incoming client requests */
+		while (true) {
 			Socket clientSocket = null;
-			
-			// thread begin
 			clientSocket = serverSoc.accept();
-			 new Thread(new Rmi_thread(clientSocket, tbl)).start();
-			/*
-			RMIMessageDelivery rmd = new RMIMessageDelivery(clientSocket);
-			RMIMessage inputMsg = rmd.getMessage();
+			/* Start new thread with client info */
+			new Thread(new RMITranscations(clientSocket, tbl)).start();
+		}
 
-            if(inputMsg.getType() == MessageType.LOOKUP )
-            {
-             String key = inputMsg.getServiceName();
-			  String methodName = inputMsg.getMethodName();
-			  Object[] arglist = inputMsg.getParams();
-			  remoteObject = tbl.lookup(key); 
-			  String interfaceName = remoteObject.getInterfaceName();
-			  RMIMessage outputMsg = new RMIMessage(MessageType.FOUND, remoteObject);
-			 rmd.sendMessage(outputMsg);
-			Class c = Class.forName("rmilab."+interfaceName + "_skeleton");
-			System.out.println("rmilab."+interfaceName + "_skeleton");
-			Constructor constructor = c.getDeclaredConstructor(ServerSocket.class);
-			Object skeleton = constructor.newInstance(new ServerSocket());
-			System.out.println("here's your skeleton! "+skeleton);
-			//Fibonacci_skeleton.continueGettingFibonacciSeries();
-	        Method method = c.getMethod(methodName);
-	        method.invoke(skeleton);
-			
-			// THREAD END
-		}
-            else if (inputMsg.getType() == MessageType.UNBIND ) {
-            	Registry.unbind(inputMsg.getServiceName());
-            }
-            else if(inputMsg.getType() == MessageType.REBIND) {
-            	Registry.bind(inputMsg.getServiceName(), inputMsg.getRemoteObject());
-            }
-            else if(inputMsg.getType() == MessageType.EXCEPTION){
-            	try {
-					throw inputMsg.getException();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            }*/
-		}
-	
 	}
-
 
 }
