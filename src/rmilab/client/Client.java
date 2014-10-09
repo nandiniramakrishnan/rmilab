@@ -51,8 +51,8 @@ public class Client implements Serializable{
 				serviceName, methodName, argNo);
 		
 		System.out.println("Client: Here's you reference! "+ror);
-	    FibonacciInterface stub = (FibonacciInterface)ror.localise(registryHost,params);
-	    ArrayList<Integer> result = stub.getFibonacciSeries();
+	    FibonacciInterface stub = (FibonacciInterface)ror.localise(registryHost);
+	    ArrayList<Integer> result = stub.getFibonacciSeries((Integer)params[0]);
 	    System.out.println(result);
 	}	
 

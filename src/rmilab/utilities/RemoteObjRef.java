@@ -41,7 +41,7 @@ public class RemoteObjRef implements Serializable {
 		return interfaceName;
 	}
 	
-	public Object localise(String hostname, Object[] params) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException
+	public Object localise(String hostname) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException
 	{
 /*
 		Object skeleton = constructor.newInstance(new ServerSocket());
@@ -54,8 +54,8 @@ public class RemoteObjRef implements Serializable {
 		System.out.println("interfaceName="+interfaceName);
 		/* Returns the class object associated with the class or interface */
 		Class c = Class.forName("rmilab.client."+interfaceName + "_stub");
-		Constructor constructor = c.getDeclaredConstructor(new Class[]{String.class, Object[].class});
-		Object stub = constructor.newInstance(hostname, params);
+		Constructor constructor = c.getDeclaredConstructor(String.class);
+		Object stub = constructor.newInstance(hostname);
 		//Object stub = c.newInstance();
 		if (stub != null) {
 			System.out.println("stub is not null! stub="+stub);
