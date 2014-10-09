@@ -74,9 +74,7 @@ public class RMITranscations implements Runnable {
 				String interfaceName = remoteObject.getInterfaceName();
 				Class c = Class
 						.forName("rmilab." + interfaceName + "_skeleton");
-				System.out.println("rmilab." + interfaceName + "_skeleton");
 				Object skeleton = c.newInstance();
-				System.out.println("The skeleton has been invoked ");
 				Method method = c.getMethod(methodName);
 				method.invoke(skeleton);
 

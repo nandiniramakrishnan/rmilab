@@ -77,7 +77,8 @@ public class Client implements Serializable {
 				/* Call getFibonacciSeries method on the stub */
 				ArrayList<Integer> result = stub
 						.getFibonacciSeries(Integer.parseInt((String)params[0]));
-				System.out.println(result);
+				System.out.println("------------------------------------------------");
+				System.out.println("Your Fibonacci series with "+arg+" elements = "+result);
 			}
 			/* This is for Example 2: Rev */
 			else if (serviceName.equals("rev")) {
@@ -89,7 +90,8 @@ public class Client implements Serializable {
 				params[0] = arg;
 				
 				String result = stub.reverseString((String) params[0]);
-				System.out.println(result);
+				System.out.println("------------------------------------------------");
+				System.out.println("Your reversed string = "+result);
 			}
 
 			else {
@@ -97,8 +99,9 @@ public class Client implements Serializable {
 			}
 
 			/* See if this client wants to make any more requests */
+			System.out.println("------------------------------------------------");
 			System.out
-					.println("Do you want to make another request? Say Y or N");
+					.print("Do you want to make another request? Say Y or N:");
 			String response = in.nextLine();
 			if (response.equals("N")) {
 				userSaysYes = false;
@@ -145,12 +148,10 @@ public class Client implements Serializable {
 
 		/* Get reply from server and process */
 		RMIMessage refmsg = rmd.getMessage();
-		System.out.println("Server responded with: " + refmsg);
 
 		/* Different possible replies */
 		if (refmsg.getType() == MessageType.FOUND) {
 			ror = refmsg.getRemoteObject();
-			System.out.println("Reference was found : " + ror);
 			return ror;
 		} else if (refmsg.getType() == MessageType.EXCEPTION) {
 			System.out

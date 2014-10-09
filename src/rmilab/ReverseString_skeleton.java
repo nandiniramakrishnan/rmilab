@@ -31,7 +31,7 @@ public class ReverseString_skeleton {
 	public ReverseString_skeleton() {
 
 		try {
-			Fibonacci_skeleton.s = new ServerSocket(9999);
+			ReverseString_skeleton.s = new ServerSocket(9999);
 		} catch (IOException e) {
 
 		}
@@ -43,14 +43,12 @@ public class ReverseString_skeleton {
 			IllegalArgumentException, InvocationTargetException {
 
         /* Notice that we are in skeleton */
-		System.out.println("Serversocket is listening on port 9999 in the skeleton");
 		Socket clientSocket;
 		Method method;
 		
 		/* Continually listen for any client requests via stub */
 		while (true) {
 			clientSocket = s.accept();
-			System.out.println("Connection has been made between stub and skeleton");
 			System.out.println("---------------------------------------------------");
 			
 			/* Read in message request from stub */
