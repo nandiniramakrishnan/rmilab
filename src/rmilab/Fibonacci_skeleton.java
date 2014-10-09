@@ -58,7 +58,7 @@ public class Fibonacci_skeleton {
 			    Method  method = c.getMethod ("setParam", N[].class);
 			    method.invoke(t, (Object) new N[]{});
 				*/
-				method = f.getClass().getMethod(inputMessage.getMethodName(), Integer.class);
+				method = f.getClass().getMethod(inputMessage.getMethodName(), int.class);
 				Object value = method.invoke(f, inputMessage.getParams()[0]);
 				RMIMessage outputMessage = new RMIMessage(MessageType.RETURN,
 						value);
