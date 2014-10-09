@@ -37,7 +37,7 @@ public class ReverseString_skeleton {
 		}
 	}
 
-	public static ArrayList<Integer> getFibonacciSeries() throws IOException,
+	public static String reverseString() throws IOException,
 			ClassNotFoundException, NoSuchMethodException, SecurityException,
 			InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
@@ -63,7 +63,7 @@ public class ReverseString_skeleton {
 				Class myObjectClass = Class.forName("rmilab.ReverseString");
 				Constructor constructor = myObjectClass
 						.getConstructor(new Class[] {});
-				Fibonacci f = (Fibonacci) constructor.newInstance();
+				ReverseString f = (ReverseString) constructor.newInstance();
 				method = f.getClass().getMethod(inputMessage.getMethodName(),
 						String.class);
 				Object value = method.invoke(f, inputMessage.getParams()[0]);
