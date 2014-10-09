@@ -15,7 +15,7 @@ import rmilab.utilities.*;
 import rmilab.utilities.RMIMessage.MessageType;
 
 public class Fibonacci_skeleton {
-	static ServerSocket s;
+    static ServerSocket s;
 
 	public Fibonacci_skeleton(ServerSocket s) {
 
@@ -23,7 +23,7 @@ public class Fibonacci_skeleton {
 			Fibonacci_skeleton.s = new ServerSocket(5678);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -32,6 +32,7 @@ public class Fibonacci_skeleton {
 			InstantiationException, IllegalAccessException,
 			IllegalArgumentException, InvocationTargetException {
 		/* Unmarshal the array */
+		//s = new ServerSocket(5678);
 		System.out.println("omg WE'RE IN THE SKELETON");
 		System.out.println("skeleton's hostname = "
 				+ (InetAddress.getLocalHost()).getHostName());

@@ -58,32 +58,35 @@ public class Rmi_thread implements Runnable{
 			}
 			else if(inputMsg.getType() == MessageType.EXCEPTION){
 				try {
-					throw inputMsg.getException();
+					//throw inputMsg.getException();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					
 				}
 			}
-		} catch (ClassNotFoundException | IOException e1) {
-			e1.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			//e1.printStackTrace();
+		}
+		   catch( IOException e1) {
+			//e1.printStackTrace();
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
 	}
