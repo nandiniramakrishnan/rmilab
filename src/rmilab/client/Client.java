@@ -14,6 +14,7 @@ import java.util.Scanner;
 
 import rmilab.utilities.FibonacciInterface;
 import rmilab.utilities.RMIMessage;
+import rmilab.utilities.RMIMessage.MessageType;
 import rmilab.utilities.RMIMessageDelivery;
 import rmilab.utilities.RemoteObjRef;
 
@@ -56,25 +57,31 @@ public class Client implements Serializable{
 			String serviceName,String methodName, int argNo) throws UnknownHostException, IOException, 
 			ClassNotFoundException {
 		RemoteObjRef ror;
-		RMIMessage msg = new RMIMessage();
-		msg.setServiceName(serviceName);
-		msg.setMethodName(methodName);
-		msg.setParams(new Object[]{new Integer(argNo)}); 
+		//RMIMessage msg = new RMIMessage();
+		//msg.setServiceName(serviceName);
+		//msg.setMethodName(methodName);
+		//msg.setParams(new Object[]{new Integer(argNo)}); 
+		Object [] params = new Object[1];
+		params[0] = argNo;
+		RMIMessage msg = new RMIMessage(MessageType.LOOKUP,serviceName, methodName,params);
 		RMIMessageDelivery rmd = new RMIMessageDelivery(registryHost, registryPort);
 		rmd.sendMessage(msg);
 		RMIMessage refmsg = rmd.getMessage();
 		System.out.println("REFMSG!!!!: "+refmsg);
-		ror = refmsg.getRemoteObject();
-		System.out.println("ROOOOR!!!! : "+ror);
+		if(refmsg.getType() == MessageType.FOUND)
+		{
+		  ror = refmsg.getRemoteObject();
+		  System.out.println("ROOOOR!!!! : "+ror);
+		  return ror;
+		}
 		/*
 		Socket s = new Socket(registryHost, registryPort);
 		ObjectOutputStream registryStream = new ObjectOutputStream(s.getOutputStream());
         registryStream.writeObject(serviceName);
         
 		*/
-        
+        return null;
         //registryStream.close();
-        return ror;
 	}
 	/*
 	public static Object getReference(Socket s) throws IOException,

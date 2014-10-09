@@ -12,6 +12,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import rmilab.utilities.RMIMessage;
+import rmilab.utilities.RMIMessage.MessageType;
 import rmilab.utilities.RMIMessageDelivery;
 import rmilab.utilities.RemoteObjRef;
 
@@ -31,7 +32,7 @@ public class RMI implements Serializable {
 		System.out.println("Your reference is binded. ror="+ror);
 		ServerSocket serverSoc = new ServerSocket(port);	/* ServerSocket is listening on this port */
 		System.out.println("Server has started listening on the port 1234"); /* can't use 1234 for anything else */
-		RemoteObjRef abc;
+		RemoteObjRef remoteObject;
 		while (true)
 		{
 			Socket clientSocket = null;
@@ -39,21 +40,19 @@ public class RMI implements Serializable {
 			// thread begin
 			clientSocket = serverSoc.accept();
 			RMIMessageDelivery rmd = new RMIMessageDelivery(clientSocket);
-			RMIMessage identifier = rmd.getMessage();
+			RMIMessage inputMsg = rmd.getMessage();
 			/*ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
 			String key = (String)in.readObject();*/
-			String key = identifier.getServiceName();
-<<<<<<< HEAD
-			abc = tbl.lookup(key); /*this is the remore obj ref */
-=======
-			String methodName = identifier.getMethodName();
-			Object[] arglist = identifier.getParams();
-			abc = tbl.lookup(key);
->>>>>>> 5ffcac607eaa0979b6cd9b85bf8a448253e8c731
-			String interfaceName = abc.getInterfaceName();
-			RMIMessage msg = new RMIMessage();
-			msg.setInterfaceName(interfaceName);
-			rmd.sendMessage(msg);
+
+            if(inputMsg.getType() == MessageType.LOOKUP )
+            {
+             String key = inputMsg.getServiceName();
+			  String methodName = inputMsg.getMethodName();
+			  Object[] arglist = inputMsg.getParams();
+			  remoteObject = tbl.lookup(key); 
+			  String interfaceName = remoteObject.getInterfaceName();
+			  RMIMessage outputMsg = new RMIMessage(MessageType.FOUND, remoteObject);
+			 rmd.sendMessage(outputMsg);
 			/*
 			ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 			out.writeObject(abc);*/
@@ -68,5 +67,7 @@ public class RMI implements Serializable {
 			
 			// THREAD END
 		}
+		}
+	
 	}
 }

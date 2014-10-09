@@ -12,7 +12,7 @@ import rmilab.utilities.RMIMessage.MessageType;
 
 
 public class Fibonacci_stub implements FibonacciInterface{
-	
+	static final int PORT = 9999;
 	
 	public ArrayList<Integer> getFibonacciSeries() throws IOException, ClassNotFoundException {
 		/*
@@ -20,13 +20,13 @@ public class Fibonacci_stub implements FibonacciInterface{
 		 */
 		
 		InetAddress ip = InetAddress.getLocalHost();
-		int port = 9999;
+		
 		/* create socket? */
-		Socket s = new Socket(ip, 9999);
+		Socket s = new Socket(ip, PORT);
 		// USE RMI MESSAGE FOR THIS INSTEAD
 		Object [] params = new Object[1];
 		params[0] = 10;
-		RMIMessage methodInvocation = new RMIMessage(MessageType.LOOKUP, "Fibonacci", "getFibonacciSeries",params);
+		RMIMessage methodInvocation = new RMIMessage(MessageType.METHOD,"fib", "rmilab.Fibonacci", "getFibonacciSeries",params);
 		//String[] methodInvocation = {"Fibonacci","getFibonacciSeries",Integer.toString(10)};
 		ObjectOutputStream objectOutput = new ObjectOutputStream(s.getOutputStream()); /* ask ta */
         objectOutput.writeObject(methodInvocation);

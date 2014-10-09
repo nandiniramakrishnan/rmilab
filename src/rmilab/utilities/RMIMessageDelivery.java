@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class RMIMessageDelivery implements Serializable  {
-	static Socket socket;
+    Socket socket;
 	public RMIMessageDelivery(Socket s) {
 		this.socket = s;
 	}

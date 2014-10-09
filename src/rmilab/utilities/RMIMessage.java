@@ -5,19 +5,17 @@ import java.io.Serializable;
 public class RMIMessage implements Serializable{
    
 	public enum MessageType{
-		FOUND, EXCEPTION, RETURN, LOOKUP, REBIND, UNBIND;
+		FOUND, EXCEPTION, RETURN, LOOKUP, REBIND, UNBIND, METHOD;
 		
 	}
-	private String key;
-
-	public MessageType type;
+	private MessageType type;
 	private RemoteObjRef obj;
 	private Exception exception;
 	private Object returnValue;
-	public String serviceName;
-	public String methodName;
-	private Object[] params;
+	private String serviceName;
+	private String methodName;
 	private String interfaceName;
+	private Object[] params;
 	
 	/* Method invocation request */	
 	
@@ -49,7 +47,16 @@ public class RMIMessage implements Serializable{
 	
 	/** Request messages **/
 	
-	/*Lookup Service message*/
+	/*Method Invocation message*/
+	public RMIMessage(MessageType type,String serviceName, String interfaceName, String methodName, Object [] params)
+	{ 
+		this.type = type;
+		this.serviceName = serviceName;
+		this.methodName = methodName;
+		this.params = params;
+	}
+	
+	/* Lookup */
 	public RMIMessage(MessageType type,String serviceName, String methodName, Object [] params)
 	{ 
 		this.type = type;
@@ -74,10 +81,6 @@ public class RMIMessage implements Serializable{
 	}
 	
 	/** Getters */
-	
-	public String getKey() {
-		return key;
-	}
 	
 	public MessageType getType()
 	{
