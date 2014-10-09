@@ -1,6 +1,7 @@
 package rmilab;
 
 import java.io.IOException;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -39,10 +40,10 @@ public class RMI implements Serializable {
 			
 			// thread begin
 			clientSocket = serverSoc.accept();
+			 new Thread(new Rmi_thread(clientSocket, tbl)).start();
+			/*
 			RMIMessageDelivery rmd = new RMIMessageDelivery(clientSocket);
 			RMIMessage inputMsg = rmd.getMessage();
-			/*ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
-			String key = (String)in.readObject();*/
 
             if(inputMsg.getType() == MessageType.LOOKUP )
             {
@@ -53,9 +54,6 @@ public class RMI implements Serializable {
 			  String interfaceName = remoteObject.getInterfaceName();
 			  RMIMessage outputMsg = new RMIMessage(MessageType.FOUND, remoteObject);
 			 rmd.sendMessage(outputMsg);
-			/*
-			ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
-			out.writeObject(abc);*/
 			Class c = Class.forName("rmilab."+interfaceName + "_skeleton");
 			System.out.println("rmilab."+interfaceName + "_skeleton");
 			Constructor constructor = c.getDeclaredConstructor(ServerSocket.class);
@@ -67,7 +65,23 @@ public class RMI implements Serializable {
 			
 			// THREAD END
 		}
+            else if (inputMsg.getType() == MessageType.UNBIND ) {
+            	Registry.unbind(inputMsg.getServiceName());
+            }
+            else if(inputMsg.getType() == MessageType.REBIND) {
+            	Registry.bind(inputMsg.getServiceName(), inputMsg.getRemoteObject());
+            }
+            else if(inputMsg.getType() == MessageType.EXCEPTION){
+            	try {
+					throw inputMsg.getException();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }*/
 		}
 	
 	}
+
+
 }

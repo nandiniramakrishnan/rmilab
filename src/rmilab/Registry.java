@@ -21,7 +21,7 @@ public class Registry {
 		  System.out.println("There is already an object with the key in the registry");
   }
   
-  public  void unbind(String objKey)
+  public static  void unbind(String objKey)
   {
 	  if(remoteObjects.containsKey(objKey))
 	  {
@@ -34,7 +34,7 @@ public class Registry {
   }
   
 
-  public RemoteObjRef lookup(String serviceName)
+  public static RemoteObjRef lookup(String serviceName)
 
   {
 	  if(remoteObjects.containsKey(serviceName))
