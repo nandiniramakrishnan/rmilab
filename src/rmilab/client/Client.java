@@ -19,13 +19,14 @@ import rmilab.utilities.RMIMessageDelivery;
 import rmilab.utilities.RemoteObjRef;
 
 public class Client implements Serializable{
-	
+	//public static String registryHost;
+	//public static int argNo;
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
 		
 		Scanner in = new Scanner(System.in);
-		String request, obj = null, registryHost = null, registryPort = null, 
-				serviceName = null, methodName = null;
+		String request, obj = null, registryPort = null, 
+				serviceName = null, methodName = null, registryHost = null;
 		int argNo = 0;
 
 		System.out.println("Enter your request");
@@ -38,6 +39,8 @@ public class Client implements Serializable{
 		serviceName = parts[3];
 		methodName = parts[4];
 		argNo = Integer.parseInt(parts[5]);
+		Object[] params = new Object[1];
+		params[0] = argNo;
 		System.out.println(obj);
 		System.out.println(registryHost);
 		System.out.println(registryPort);
@@ -48,7 +51,7 @@ public class Client implements Serializable{
 				serviceName, methodName, argNo);
 		
 		System.out.println("Client: Here's you reference! "+ror);
-	    FibonacciInterface stub = (FibonacciInterface)ror.localise();
+	    FibonacciInterface stub = (FibonacciInterface)ror.localise(registryHost,params);
 	    ArrayList<Integer> result = stub.getFibonacciSeries();
 	    System.out.println(result);
 	}	
