@@ -19,11 +19,10 @@ import rmilab.utilities.RMIMessageDelivery;
 import rmilab.utilities.RemoteObjRef;
 
 public class Client implements Serializable{
-	//public static String registryHost;
-	//public static int argNo;
+	static boolean userSaysYes = true;
 	@SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException {
-		
+		while (userSaysYes) {
 		Scanner in = new Scanner(System.in);
 		String request, obj = null, registryPort = null, 
 				serviceName = null, methodName = null, registryHost = null;
@@ -54,7 +53,15 @@ public class Client implements Serializable{
 	    FibonacciInterface stub = (FibonacciInterface)ror.localise(registryHost);
 	    ArrayList<Integer> result = stub.getFibonacciSeries((Integer)params[0]);
 	    System.out.println(result);
+	    System.out.println("Do you want to make another request? Say Y or N");
+		
+		String response = in.nextLine();
+		if (response.equals("N")) {
+			userSaysYes = false;
+			System.out.println("Goodbye!");
+		}
 	}	
+	}
 
 	public static Object performLookup(String registryHost, int registryPort, 
 			String serviceName,String methodName, int argNo) throws UnknownHostException, IOException, 
