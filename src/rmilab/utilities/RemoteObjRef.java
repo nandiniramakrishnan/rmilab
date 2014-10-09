@@ -1,7 +1,11 @@
 package rmilab.utilities;
 
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 
 public class RemoteObjRef implements Serializable {
 	
@@ -37,12 +41,22 @@ public class RemoteObjRef implements Serializable {
 		return interfaceName;
 	}
 	
-	public Object localise() throws ClassNotFoundException, InstantiationException, IllegalAccessException
+	public Object localise(String hostname, Object[] params) throws ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException
 	{
+/*
+		Object skeleton = constructor.newInstance(new ServerSocket());
+		System.out.println("here's your skeleton! "+skeleton);
+		//Fibonacci_skeleton.continueGettingFibonacciSeries();
+        Method method = c.getMethod(methodName);
+        method.invoke(skeleton);
+	*/	
+		
 		System.out.println("interfaceName="+interfaceName);
 		/* Returns the class object associated with the class or interface */
 		Class c = Class.forName("rmilab.client."+interfaceName + "_stub");
-		Object stub = c.newInstance();
+		Constructor constructor = c.getDeclaredConstructor(new Class[]{String.class, Object[].class});
+		Object stub = constructor.newInstance(hostname, params);
+		//Object stub = c.newInstance();
 		if (stub != null) {
 			System.out.println("stub is not null! stub="+stub);
 		}
