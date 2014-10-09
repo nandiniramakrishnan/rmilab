@@ -34,11 +34,16 @@ public class RMI implements Serializable {
 		/* IP Address of the server */
 		InetAddress ipAddress = InetAddress.getLocalHost();
 
-		/* Bind examples to the registry */
-		RemoteObjRef ror = new RemoteObjRef(ipAddress, port, "fib", "Fibonacci");
-		Registry.bind("fib", ror);
-		System.out.println("Your reference is binded. ror=" + ror);
+		/* Bind Fib example to the registry */
+		RemoteObjRef ror1 = new RemoteObjRef(ipAddress, port, "fib", "Fibonacci");
+		Registry.bind("fib", ror1);
+		System.out.println("Your reference is binded. ror=" + ror1);
 
+		/* Bind Rev example to the registry */
+		RemoteObjRef ror2 = new RemoteObjRef(ipAddress, port, "rev", "ReverseString");
+		Registry.bind("rev", ror2);
+		System.out.println("Your reference is binded. ror=" + ror2);
+		
 		/* Start Server */
 		ServerSocket serverSoc = new ServerSocket(port);
 		System.out.println("Server has started listening on the port 1234");

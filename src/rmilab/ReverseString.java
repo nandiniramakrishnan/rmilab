@@ -4,7 +4,7 @@ import rmilab.utilities.ReverseInterface;
 
 public class ReverseString implements ReverseInterface {
 	public String reverseString(String str) {
-		String reverse = null;
+		String reverse = "";
 		int length = str.length();
 
 		for ( int i = length - 1 ; i >= 0 ; i-- ) {

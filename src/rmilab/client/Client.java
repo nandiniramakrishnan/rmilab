@@ -36,7 +36,7 @@ public class Client implements Serializable {
 			String request, obj = null, registryPort = null, serviceName = null, methodName = null, registryHost = null;
 
 			/* Get client request from standard in */
-			int argNo = 0;
+			Object arg;
 			System.out.println("Enter your request");
 			System.out
 					.println("<object-name> <registry-host> <registry-port> <service-name> <method-name> <args...>");
@@ -49,22 +49,17 @@ public class Client implements Serializable {
 			registryPort = parts[2];
 			serviceName = parts[3];
 			methodName = parts[4];
-			argNo = Integer.parseInt(parts[5]);
-			Object[] params = new Object[1];
-			params[0] = argNo;
+			
+			
+			arg = parts[5];
 
-			/* Print out confirmation of the parsed info */
-			System.out.println(obj);
-			System.out.println(registryHost);
-			System.out.println(registryPort);
-			System.out.println(serviceName);
-			System.out.println(methodName + " args:" + argNo);
-			System.out.println("registryPort=" + registryPort);
+
+
 
 			/* Lookup the remote object reference from the registry */
 			RemoteObjRef ror = (RemoteObjRef) performLookup(registryHost,
 					Integer.parseInt(registryPort), serviceName, methodName,
-					argNo);
+					arg);
 
 			/* Print confirmation of found reference */
 			System.out.println("Client: Here's you reference! " + ror);
@@ -74,16 +69,25 @@ public class Client implements Serializable {
 				/* Create and localize stub */
 				FibonacciInterface stub = (FibonacciInterface) ror
 						.localise(registryHost);
-
+				
+				/* Properly pass in as many arguments as needed */
+				Object[] params = new Object[1];
+				params[0] = arg;
+				
 				/* Call getFibonacciSeries method on the stub */
 				ArrayList<Integer> result = stub
-						.getFibonacciSeries((Integer) params[0]);
+						.getFibonacciSeries(Integer.parseInt((String)params[0]));
 				System.out.println(result);
 			}
 			/* This is for Example 2: Rev */
 			else if (serviceName.equals("rev")) {
 				ReverseInterface stub = (ReverseInterface) ror
 						.localise(registryHost);
+				
+				/* Properly pass in as many arguments as needed */
+				Object[] params = new Object[1];
+				params[0] = arg;
+				
 				String result = stub.reverseString((String) params[0]);
 				System.out.println(result);
 			}
@@ -123,7 +127,7 @@ public class Client implements Serializable {
 	 * @throws ClassNotFoundException
 	 */
 	public static Object performLookup(String registryHost, int registryPort,
-			String serviceName, String methodName, int argNo)
+			String serviceName, String methodName, Object argNo)
 			throws UnknownHostException, IOException, ClassNotFoundException {
 		RemoteObjRef ror;
 		/* Formatting arguments into array to fit RMIMessage requirements */
