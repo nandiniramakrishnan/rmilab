@@ -1,4 +1,4 @@
-package rmilab;
+package rmilab.server;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

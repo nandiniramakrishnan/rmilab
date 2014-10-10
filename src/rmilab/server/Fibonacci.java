@@ -1,4 +1,4 @@
-package rmilab;
+package rmilab.server;
 
 import java.util.ArrayList;
 import rmilab.utilities.FibonacciInterface;

@@ -1,4 +1,4 @@
-package rmilab;
+package rmilab.server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -58,7 +58,7 @@ public class Fibonacci_skeleton {
 
 			/* Process method request and perform computation */
 			if (inputMessage.getType() == MessageType.METHOD) {
-				Class myObjectClass = Class.forName("rmilab.Fibonacci");
+				Class myObjectClass = Class.forName("rmilab.server.Fibonacci");
 				Constructor constructor = myObjectClass
 						.getConstructor(new Class[] {});
 				Fibonacci f = (Fibonacci) constructor.newInstance();

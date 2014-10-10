@@ -1,4 +1,4 @@
-package rmilab;
+package rmilab.server;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -73,7 +73,7 @@ public class RMITranscations implements Runnable {
 				/* Start and invoke the skeleton */
 				String interfaceName = remoteObject.getInterfaceName();
 				Class c = Class
-						.forName("rmilab." + interfaceName + "_skeleton");
+						.forName("rmilab.server." + interfaceName + "_skeleton");
 				Object skeleton = c.newInstance();
 				Method method = c.getMethod(methodName);
 				method.invoke(skeleton);

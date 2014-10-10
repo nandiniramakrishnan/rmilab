@@ -47,7 +47,7 @@ public class Fibonacci_stub implements FibonacciInterface {
 		params[0] = num;
 
 		RMIMessage methodInvocation = new RMIMessage(MessageType.METHOD, "fib",
-				"rmilab.Fibonacci", "getFibonacciSeries", params);
+				"rmilab.server.Fibonacci", "getFibonacciSeries", params);
 
 		/* Send Method Request to skeleton */
 		RMIMessageDelivery rmd = new RMIMessageDelivery(s);

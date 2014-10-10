@@ -47,7 +47,7 @@ public class ReverseString_stub implements ReverseInterface {
 		params[0] = str;
 
 		RMIMessage methodInvocation = new RMIMessage(MessageType.METHOD, "rev",
-				"rmilab.ReverseString", "reverseString", params);
+				"rmilab.server.ReverseString", "reverseString", params);
 
 		/* Send Method Request to skeleton */
 		RMIMessageDelivery rmd = new RMIMessageDelivery(s);

@@ -1,4 +1,4 @@
-package rmilab;
+package rmilab.server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -58,7 +58,7 @@ public class ReverseString_skeleton {
 
 			/* Process method request and perform computation */
 			if (inputMessage.getType() == MessageType.METHOD) {
-				Class myObjectClass = Class.forName("rmilab.ReverseString");
+				Class myObjectClass = Class.forName("rmilab.server.ReverseString");
 				Constructor constructor = myObjectClass
 						.getConstructor(new Class[] {});
 				ReverseString f = (ReverseString) constructor.newInstance();

@@ -1,4 +1,4 @@
-package rmilab;
+package rmilab.server;
 
 import java.io.IOException;
 
