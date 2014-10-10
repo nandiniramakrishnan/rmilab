@@ -1,12 +1,10 @@
 package rmilab.client;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-import java.util.ArrayList;
 
-import rmilab.utilities.FibonacciInterface;
+import java.net.Socket;
+
+
 import rmilab.utilities.RMIMessage;
 import rmilab.utilities.RMIMessage.MessageType;
 import rmilab.utilities.RMIMessageDelivery;
